@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
+import { Download } from "lucide-react";
 
 const Palette = () => {
   const canvasRef = useRef(null);
@@ -19,7 +20,7 @@ const Palette = () => {
         ctx.lineCap = "round";
       }
     }
-  }, [color]);
+  }, [color, brushSize]);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -68,6 +69,16 @@ const Palette = () => {
     }
   };
 
+  const saveImage = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const link = document.createElement("a");
+      link.download = "palette-drawing.png";
+      link.href = (canvas as HTMLCanvasElement).toDataURL("image/png");
+      link.click();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       <div className="flex gap-4 mb-4">
@@ -90,6 +101,13 @@ const Palette = () => {
           className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-600"
         >
           Clear
+        </button>
+        <button
+          onClick={saveImage}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2"
+        >
+          <Download size={20} />
+          Save
         </button>
       </div>
       <canvas
